@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>SB Admin 2 - Blank</title>
 
@@ -19,8 +20,16 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('backend/css/sb-admin-2.min.css') }}" rel="stylesheet">
+    <!-- For the file sending section (package filemanager)-->
+    <script src='https://cdn.tiny.cloud/1/no-api-key/tinymce/4/tinymce.min.js'></script>
+    <style>
+        svg {
+            width: 20px;
+        }
+    </style>
 
 </head>
+
 
 <body id="page-top">
 
@@ -43,9 +52,44 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{{ route('dashboard') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span>{{ __('side.dashboard') }}</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('post.index') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>{{ __('side.post') }}</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('backend.about.index') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>{{ __('side.about') }}</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('setting.index') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>{{ __('side.setting') }}</span></a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle px-lg-3 py-3  py-lg-4" href="post.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ __('nav.language')}}
+                </a>
+                <div class="dropdown-menu">
+                    <a href="{{ route('locale',['locale'=>'fa']) }}" class="dropdown-item">
+                        persian
+
+                    </a>
+                    <a href="{{ route('locale',['locale'=>'en']) }}" class="dropdown-item">
+                        english
+
+                    </a>
+                    <div class="dropdown-divider"></div>
+                </div>
             </li>
 
 
@@ -176,6 +220,71 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('backend/js/sb-admin-2.min.js') }} backend/"></script>
+
+    <!-- sweetalert package-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @yield('script')
+
+
+    <!-- for package filemanager-->
+    <script>
+        var editor_config = {
+            path_absolute: "/",
+            selector: "textarea.my-editor",
+            plugins: [
+                "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+                "searchreplace wordcount visualblocks visualchars code fullscreen",
+                "insertdatetime media nonbreaking save table contextmenu directionality",
+                "emoticons template paste textcolor colorpicker textpattern"
+            ],
+            toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
+            relative_urls: false,
+            file_browser_callback: function(field_name, url, type, win) {
+                var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName(
+                    'body')[0].clientWidth;
+                var y = window.innerHeight || document.documentElement.clientHeight || document
+                    .getElementsByTagName('body')[0].clientHeight;
+
+                var cmsURL = editor_config.path_absolute + 'laravel-filemanager?field_name=' + field_name;
+                if (type == 'image') {
+                    cmsURL = cmsURL + "&type=Images";
+                } else {
+                    cmsURL = cmsURL + "&type=Files";
+                }
+
+                tinyMCE.activeEditor.windowManager.open({
+                    file: cmsURL,
+                    title: 'Filemanager',
+                    width: x * 0.8,
+                    height: y * 0.8,
+                    resizable: "yes",
+                    close_previous: "no"
+                });
+            }
+        };
+
+        tinymce.init(editor_config);
+    </script>
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+        @if (Session::has('success'))
+            Toast.fire({
+                icon: 'success',
+                title: "{{ Session::get('success') }}"
+            })
+        @endif
+    </script>
 
 </body>
 
