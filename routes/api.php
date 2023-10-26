@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\PostController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     // return "hellow word";
 
 });
+
+Route::apiResource('/post',PostController::class);

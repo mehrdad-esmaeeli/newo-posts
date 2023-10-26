@@ -75,22 +75,20 @@
                     <span>{{ __('side.setting') }}</span></a>
             </li>
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle px-lg-3 py-3  py-lg-4" href="post.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    {{ __('nav.language')}}
-                </a>
-                <div class="dropdown-menu">
-                    <a href="{{ route('locale',['locale'=>'fa']) }}" class="dropdown-item">
-                        persian
-
-                    </a>
-                    <a href="{{ route('locale',['locale'=>'en']) }}" class="dropdown-item">
-                        english
-
-                    </a>
-                    <div class="dropdown-divider"></div>
-                </div>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('Role.index') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>{{ __('side.role') }}</span></a>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('users.index') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>{{ __('side.users') }}</span></a>
+            </li>
+
+
+
 
 
 

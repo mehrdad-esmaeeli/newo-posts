@@ -4,7 +4,10 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\Topic;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Str;
 
@@ -15,8 +18,10 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(User $user)
     {
+
+
         return view('backend.post.index')->with('posts', Post::where('lang',app()->getLocale())->paginate(10));
     }
 
@@ -27,7 +32,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('backend.post.create');
+        return view('backend.post.create')->with('topics',Topic::all());
     }
 
     /**
@@ -38,13 +43,22 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $request->validate([
             'title' => 'required|max:300',
             'sub_title' => 'required|max:500',
-            'description' => 'required|max:1000'
+            'description' => 'required|max:1000',
+            'topic' => 'required|array'
         ]);
 
-        Post::create(['title' => $request->title, 'sub_title' => $request->sub_title, 'description' => $request->description, 'slug' => Str::slug($request->title),'lang'=>app()->getLocale()]);
+
+        $post= Post::create(['title' => $request->title, 'sub_title' => $request->sub_title, 'description' => $request->description, 'slug' => Str::slug($request->title),'lang'=>app()->getLocale(),'profile_id'=>Auth::user()->profile->id]);
+        $post->topics()->attach($request->topic);
+
+        foreach($request->image as $image){
+            $post->images()->create(['image'=>$image]);
+        }
         Session::flash('success','create succesfuly');
         return redirect()->route('post.index');
     }
@@ -69,7 +83,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
 
-        return view('backend.post.edit')->with('post', $post);
+        return view('backend.post.edit')->with('topics', Topic::all())->with('post', $post);
     }
 
     /**
@@ -92,6 +106,8 @@ class PostController extends Controller
         $post->description=$request->description;
         $post->slug=Str::slug($request->title);
         $post->save();
+
+        $post->topics()->sync($request->topic);
         Session::flash('success','update succesfuly');
 
         return redirect()->route('post.index');
@@ -105,11 +121,13 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $this->authorize('delete',$post);
         $post->delete();
         return "success";
     }
 
     public function trash(){
+
         return view('backend.post.trash')->with('posts',Post::onlyTrashed()->paginate(10));
     }
 

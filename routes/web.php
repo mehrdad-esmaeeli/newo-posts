@@ -4,10 +4,16 @@ use App\Http\Controllers\AboutController as FrontendAboutController;
 use App\Http\Controllers\backend\AboutController;
 use App\Http\Controllers\backend\PostController;
 use App\Http\Controllers\backend\SettingController;
+use App\Http\Controllers\backend\UserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Http\Middleware\SettingMiddleware;
+use App\Models\Post;
+use App\Models\Profile;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -24,13 +30,29 @@ use Illuminate\Support\Facades\Session;
 
 
 
-
+Route::resource('users',UserController::class);
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/posts/{slug}', [HomeController::class, 'show'])->name('home.show');
 
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'send'])->name('send');
+
+
+Route::get('/test',function(){
+
+    // return Post::find(2)->profile->user;
+
+    // return Profile::find(3)->posts;
+
+ $post= DB::table('posts')->join('profiles','posts.profile_id','profiles.id')
+ ->join('users','profiles.user_id','users.id')->select('posts.*','profiles.profile_pic as picture','users.name as username')
+ ->get();
+
+ dd($post);
+
+
+});
 
 
 
@@ -61,6 +83,20 @@ Route::middleware('auth')->group(function () {
 
     Route::get('setting', [SettingController::class, 'index'])->name('setting.index');
     Route::post('setting/store', [SettingController::class, 'store'])->name('setting.store');
+
+    Route::resource('Role',RoleController::class);
+
+
+
+
+
+
+
+    // Route::get('users',[UserController::class,'index'])->name('users.index');
+    // Route::get('users/create',[UserController::class,'create'])->name('users.create');
+    // Route::get('users/edite/{user}',[UserController::class,'create'])->name('users.create');
+
+
 });
 
 
