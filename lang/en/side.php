@@ -3,5 +3,7 @@ return [
     'dashboard'=>'Dashboard',
     'post'=>'Post',
     'about'=>'About',
-    'setting'=>'Setting'
+    'setting'=>'Setting',
+    'role'=>'Role',
+    'users'=>'Users'
 ];

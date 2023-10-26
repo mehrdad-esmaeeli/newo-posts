@@ -9,13 +9,8 @@
 
 
         <div class="card">
-            <h5 class="card-header">Posts
-                <a href="{{ route('post.create') }}" class="btn btn-success float-right">Add Create</a>
-                <br>
-                <br>
-
-                <a href="{{ route('trash') }}" class="btn btn-danger float-right">Trash</a>
-
+            <h5 class="card-header">Users
+                <a href="{{ route('users.create') }}" class="btn btn-success float-right">Add Users</a>
 
             </h5>
             <div class="card-body">
@@ -25,38 +20,36 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Title</th>
-                            <th>Subtitle</th>
-                            <th>Auther</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Image</th>
+                            <th>Role</th>
                             <th>Action</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        @foreach ($posts as $index => $post)
+                        @foreach ($users as $index => $user)
                             <tr>
                                 <td>
-                                    {{ $posts->currentPage() * 10 - 10 + $index + 1 }}
+                                    {{ $users->currentPage() * 10 - 10 + $index + 1 }}
                                 </td>
 
                                 <td>
-                                    {{ $post->title }}
+                                    {{ $user->name }}
                                 </td>
                                 <td>
-                                    {{ $post->sub_title }}
+                                    {{ $user->email }}
                                 </td>
                                 <td>
-                                    {{ $post->profile->user->name }}
+                                    {{ $user->profile->profile_pic }}
                                 </td>
                                 <td>
-
-
-                                    <a href="{{ route('post.edit', ['post' => $post->id]) }}"><i class="fa fa-edit"></i></a>
-
-                                    <a href="#" class="delete" id="{{ $post->id }}"><i
-                                            class="fa fa-trash"></i></a>
-
-
+                                    {{ $user->user_role}}
+                                </td>
+                                <td>
+                                    <a href="{{ route('users.edit', ['user' => $user->id]) }}"><i class="fa fa-edit"></i></a>
+                                    <a href="#" class="delete" id="{{ $user->id }}"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -66,7 +59,7 @@
 
 
                 <tfoot>
-                    {{ $posts->links() }}
+                    {{ $users->links() }}
                 </tfoot>
 
 

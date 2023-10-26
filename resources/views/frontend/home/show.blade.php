@@ -26,6 +26,10 @@
                  @php
                    echo $post->description
                  @endphp
+
+                 @foreach ($post->topics as $postTopic )
+                     <span>{{ $postTopic->title }}</span><br>
+                 @endforeach
                 </div>
             </div>
         </div>

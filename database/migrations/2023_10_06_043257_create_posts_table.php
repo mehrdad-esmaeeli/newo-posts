@@ -18,7 +18,11 @@ return new class extends Migration
             $table->string('title');
             $table->string('sub_title');
             $table->string('slug');
+            $table->unsignedBigInteger('profile_id');
+
+
             $table->text('description');
+
             $table->timestamps();
         });
     }

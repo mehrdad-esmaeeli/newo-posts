@@ -36,6 +36,29 @@
 
 
                      </div>
+
+                     <div class="form-group">
+                        <label for="topics">Topics:</label><br>
+                         @foreach ($topics as $topic)
+                         {{ $topic->title }}
+                         <input type="checkbox" name="topic[]" class="mr-2" value="{{ $topic->id }}"
+                          @foreach ($post->topics as $postTopic )
+                          @if ($postTopic->id == $topic->id)
+                              checked
+                          @endif
+
+                          @endforeach
+
+                         >
+                         @endforeach
+
+
+
+
+
+
+                    </div>
+
                      <button class="btn btn-success" class="btn btn-success">update</button>
 
                  </form>

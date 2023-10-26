@@ -9,12 +9,12 @@
 
 
         <div class="card">
-            <h5 class="card-header">Posts
-                <a href="{{ route('post.create') }}" class="btn btn-success float-right">Add Create</a>
+            <h5 class="card-header">Role
+                <a href="{{ route('Role.create') }}" class="btn btn-success float-right">Add Role</a>
                 <br>
                 <br>
 
-                <a href="{{ route('trash') }}" class="btn btn-danger float-right">Trash</a>
+                {{-- <a href="{{ route('trash') }}" class="btn btn-danger float-right">Trash</a> --}}
 
 
             </h5>
@@ -25,36 +25,31 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Title</th>
-                            <th>Subtitle</th>
-                            <th>Auther</th>
+                            <th>Name</th>
                             <th>Action</th>
+
                         </tr>
                     </thead>
 
                     <tbody>
-                        @foreach ($posts as $index => $post)
+                        @foreach ($roles as $index => $role)
                             <tr>
                                 <td>
-                                    {{ $posts->currentPage() * 10 - 10 + $index + 1 }}
+                                    {{ $roles->currentPage() * 10 - 10 + $index + 1 }}
                                 </td>
 
                                 <td>
-                                    {{ $post->title }}
+                                    {{ $role->name }}
                                 </td>
-                                <td>
-                                    {{ $post->sub_title }}
-                                </td>
-                                <td>
-                                    {{ $post->profile->user->name }}
-                                </td>
+
                                 <td>
 
+                                    <a href="{{ route('Role.show', ['Role' => $role->id]) }}"><i class="fa fa-lock"></i></a>
+                                    <a href="{{ route('post.edit', ['post' => $role->id]) }}"><i class="fa fa-edit"></i></a>
 
-                                    <a href="{{ route('post.edit', ['post' => $post->id]) }}"><i class="fa fa-edit"></i></a>
-
-                                    <a href="#" class="delete" id="{{ $post->id }}"><i
+                                    <a href="#" class="delete" id="{{ $role->id }}"><i
                                             class="fa fa-trash"></i></a>
+
 
 
                                 </td>
@@ -66,7 +61,7 @@
 
 
                 <tfoot>
-                    {{ $posts->links() }}
+                    {{ $roles->links() }}
                 </tfoot>
 
 
